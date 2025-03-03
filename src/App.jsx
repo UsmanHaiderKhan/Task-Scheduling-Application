@@ -1,5 +1,6 @@
-import NewProject from "./components/NewProject";
-import Sidebar from "./components/sidebar";
+import NewProject from "./components/NewProject.jsx";
+import NoProject from "./components/NoProject.jsx";
+import Sidebar from "./components/Sidebar.jsx";
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <main className="h-screen py-8 flex gap-8">
 
         <Sidebar />
-        <NewProject />
+        <NoProject />
 
       </main>
     </>
