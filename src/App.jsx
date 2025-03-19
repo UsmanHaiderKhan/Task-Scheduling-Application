@@ -21,23 +21,32 @@ function App() {
 
   function handleAddProject(projectData) {
     setProjectState((prevState) => {
+      const projectId = Math.random().toString();
       const newProject = {
         ...projectData,
-        id: Math.random().toString(),
-
+        id: projectId
       };
       return {
         ...prevState,
+        selectedProjectId: null,
         projects: [...prevState.projects, newProject]
       }
     });
   }
+  function handleCancelAddProject() {
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined
+      }
+    });
+  }
 
-  console.log(projectState.projects);
+
 
   let content;
   if (projectState.selectedProjectId === null) {
-    content = <NewProject onAddProject={handleAddProject} />;
+    content = <NewProject onAddProject={handleAddProject} onCancel={handleCancelAddProject} />;
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProject onStartAddProject={handleStartAddProject} />;
   }
@@ -45,7 +54,7 @@ function App() {
     <>
       <main className="h-screen py-8 flex gap-8">
 
-        <Sidebar onStartAddProject={handleStartAddProject} />
+        <Sidebar onStartAddProject={handleStartAddProject} projects={projectState.projects} />
         {content}
 
       </main>
