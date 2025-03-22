@@ -7,7 +7,8 @@ import SelectedProject from "./components/SelectedProject.jsx";
 function App() {
   const [projectState, setProjectState] = useState({
     selectedProjectId: undefined,
-    projects: []
+    projects: [],
+    tasks: []
   });
 
   function handleStartAddProject() {
@@ -34,6 +35,7 @@ function App() {
       }
     });
   }
+
   function handleCancelAddProject() {
     setProjectState((prevState) => {
       return {
@@ -63,14 +65,46 @@ function App() {
     });
   }
 
+  function handleDeleteTask(id) {
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+      
+        projects: prevState.tasks.filter(
+          task => task.id !== id)
+      }
+    });
+  }
+
+  function handleAddTask(text) {
+    setProjectState((prevState) => {
+      const taskId = Math.random().toString();
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId
+      };
+      return {
+        ...prevState,
+        tasks: [newTask, ...prevState.tasks],
+      }
+    });
+  }
+
 
   const selectedProject = projectState.projects.find(project => project.id === projectState.selectedProjectId);
-  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />;
+  let content = <SelectedProject project={selectedProject}
+    onDelete={handleDeleteProject}
+    onAddTask={handleAddTask}
+    onDeleteTask={handleDeleteTask}
+    tasks={projectState.tasks}
+    selectedProjectId={projectState.selectedProjectId} />;
   if (projectState.selectedProjectId === null) {
     content = <NewProject onAddProject={handleAddProject} onCancel={handleCancelAddProject} />;
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProject onStartAddProject={handleStartAddProject} />;
   }
+
   return (
     <>
       <main className="h-screen py-8 flex gap-8">
